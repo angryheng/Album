@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Title</title>    
+    <style>
+        html,body {
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+        }
+        body, ul, div, li {
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            list-style : none;
+        }
+        .clearfix {
+        	zoom : 1;
+        }
+        .clearfix::before,
+        .clearfix::after {
+        	content: ".";
+        	display: block;
+        	height: 0;
+        	line-height: 0;
+        	overflow: hidden;
+        	visibility: hidden;
+        	clear: both;
+        }
+        a {
+            text-decoration : none;
+            color : #fff;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .root-container {
+            font-size: .8rem /* 16/20 */;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2.25rem;
+            line-height : 2.25rem;
+            text-align : center;
+            background: linear-gradient(to bottom, #111, #333);
+            color : #fff;
+        }
+        .btn {
+            position: absolute;
+            padding: 0 1rem;
+        }
+        .btn:nth-of-type(1) {
+            left: .5rem;
+        }
+        .btn:nth-of-type(2) {
+            right: .5rem;
+        }
+        .pic-list-container {
+            width: 100%;
+            margin-top: 45px;
+            margin-bottom: 45px;
+        }
+        .pic-list-container li {
+            float: left;
+            width: 33.3333333%;
+            padding-bottom: 33.3333333%;
+            background: url("video/1.jpg") no-repeat;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2.5rem;
+            line-height : 2.5rem;
+            background: linear-gradient(to bottom, #333, #111);
+        }
+        footer a {
+            float: left;
+            width: 50%;
+            text-align : center;
+        }
+        footer a.active {
+            background-color : #000;
+        }
+        .recycle {
+            position: fixed;
+            bottom: -200px;
+            left: calc(50% - 4rem);
+            width: 8rem;
+            height: 8rem;
+            background: url("img/recycle.png") no-repeat;
+            background-size : contain;
+        }
+        .recycle:nth-of-type(2) {
+            background: url("img/recycle2.png") no-repeat;
+            background-size : contain;
+        }
+    </style>
+</head>
+<body>
+    <div id="root" class="root-container">
+        <header>
+            <a href="javascript:;" class="btn">删除</a>
+            相机相册
+            <a href="javascript:;" class="btn">选择</a>
+        </header>
+        <section class="pic-list-container clearfix">
+            <ul class="pic-list">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </section>
+        <footer>
+            <a href="javascript:;" class="active">相机相册</a>
+            <a href="javascript:;">所有相册</a>
+        </footer>
+        <span class="recycle"></span>
+        <span class="recycle"></span>
+    </div>
+</body>
+</html>
