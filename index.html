@@ -48,6 +48,7 @@
             text-align : center;
             background: linear-gradient(to bottom, #111, #333);
             color : #fff;
+            z-index : 9999;
         }
         .btn {
             position: absolute;
@@ -55,9 +56,12 @@
         }
         .btn:nth-of-type(1) {
             left: .5rem;
+            right: auto;
+            display: none;
         }
         .btn:nth-of-type(2) {
             right: .5rem;
+            left: auto;
         }
         .pic-list-container {
             width: 100%;
@@ -68,7 +72,9 @@
             float: left;
             width: 33.3333333%;
             padding-bottom: 33.3333333%;
-            background: url("video/1.jpg") no-repeat;
+            background-repeat : no-repeat;
+            background-size: cover;
+            box-sizing: border-box;
         }
         footer {
             position: fixed;
@@ -101,33 +107,20 @@
             background-size : contain;
         }
     </style>
+    <script type="text/javascript" src="js/move.js"></script>
+    <script>
+        var aPicSrc = ['video/1.jpg', 'video/2.jpg', 'video/3.jpg', 'video/4.jpg', 'video/5.jpg', 'video/6.jpg', 'video/7.jpg', 'video/8.jpg', 'video/9.jpg', 'video/10.jpg', 'video/11.jpg', 'video/12.jpg', 'video/13.jpg', 'video/14.jpg', 'video/15.jpg', 'video/16.jpg',];
+    </script>
 </head>
 <body>
     <div id="root" class="root-container">
         <header>
-            <a href="javascript:;" class="btn">删除</a>
+            <a href="javascript:;" class="btn" id="btn_delete">删除</a>
             相机相册
-            <a href="javascript:;" class="btn">选择</a>
+            <a href="javascript:;" class="btn" id="btn_select">选择</a>
         </header>
         <section class="pic-list-container clearfix">
-            <ul class="pic-list">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
+            <ul class="pic-list" id="pic_list"></ul>
         </section>
         <footer>
             <a href="javascript:;" class="active">相机相册</a>
@@ -136,5 +129,68 @@
         <span class="recycle"></span>
         <span class="recycle"></span>
     </div>
+    <script>
+        var oRoot = document.getElementById("root");
+        var btn_select = document.getElementById("btn_select");
+        var btn_delete = document.getElementById("btn_delete");
+        var pic_list = document.getElementById("pic_list");
+        var bOff = true;
+        for(var i = 0, len = aPicSrc.length; i < len; i ++) {
+            var oLi = document.createElement("li");
+            oLi.dataset.index = i;
+            oLi.style.backgroundImage = "url(" + aPicSrc[i] + ")";
+            pic_list.appendChild(oLi);
+        }
+        var aRemove = [];
+        var pic_list_li = pic_list.getElementsByTagName("li");
+        btn_select.addEventListener('touchend', fnEnd, false);
+        btn_delete.addEventListener('touchend', fnRemove, false);
+        function fnEnd() {
+            if(bOff) {
+                this.innerHTML = "取消";
+                for(var j = 0, len = pic_list_li.length; j < len; j ++) {
+                    pic_list_li[j].addEventListener('touchend', fnSelected, false);
+                }
+                btn_delete.style.display = "block";
+            } else {
+                this.innerHTML = "选择";
+                for(var j = 0, len = pic_list_li.length; j < len; j ++) {
+                    animate({
+                        obj : pic_list_li[j],
+                        oTarget : {
+                            opacity : 100
+                        },
+                        iTime : 200,
+                        sType : 'linear'
+                    });
+                }
+                btn_delete.style.display = "none";
+            }
+            bOff = !bOff;
+        }
+        function fnSelected() {
+            aRemove.push(this.dataset.index);
+            btn_delete.style.display = "block";
+            animate({
+                obj : this,
+                oTarget : {
+                    opacity : 30
+                },
+                iTime : 200,
+                sType : 'linear'
+            });
+        }
+        function fnRemove() {
+            aRemove = aRemove.sort(function (a, b) {
+                return a - b;
+            });
+            while(aRemove.length) {
+                pic_list.removeChild(pic_list_li[aRemove.pop()]);
+            }
+            for(var i = 0, len = pic_list_li.length; i < len; i ++) {
+                pic_list_li[i].dataset.index = i;
+            }
+        }
+    </script>
 </body>
 </html>
