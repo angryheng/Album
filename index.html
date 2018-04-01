@@ -64,17 +64,26 @@
             left: auto;
         }
         .pic-list-container {
+            position: absolute;
             width: 100%;
-            margin-top: 45px;
-            margin-bottom: 45px;
+            height: 100%;
+            padding: 2.25rem 0 2.5rem;
+        }
+        .pic-list-container .pic-list {
+            position: relative;
+            height: 100%;
         }
         .pic-list-container li {
-            float: left;
+            /* float: left; */
+            position: absolute;
+            left: -100%;
+            top: -100%;
             width: 33.3333333%;
             padding-bottom: 33.3333333%;
             background-repeat : no-repeat;
             background-size: cover;
             box-sizing: border-box;
+            /* transition: left .5s, top .5s; */
         }
         footer {
             position: fixed;
@@ -143,17 +152,22 @@
         }
         var aRemove = [];
         var pic_list_li = pic_list.getElementsByTagName("li");
+        var iWidth = parseInt(computedStyle(pic_list_li[0], 'width'));
         btn_select.addEventListener('touchend', fnEnd, false);
         btn_delete.addEventListener('touchend', fnRemove, false);
+        /*
+            0 l 0 t 0
+            1 l 33.3333333
+        */
         function fnEnd() {
             if(bOff) {
-                this.innerHTML = "取消";
+                btn_select.innerHTML = "取消";
                 for(var j = 0, len = pic_list_li.length; j < len; j ++) {
                     pic_list_li[j].addEventListener('touchend', fnSelected, false);
                 }
                 btn_delete.style.display = "block";
             } else {
-                this.innerHTML = "选择";
+                btn_select.innerHTML = "选择";
                 for(var j = 0, len = pic_list_li.length; j < len; j ++) {
                     animate({
                         obj : pic_list_li[j],
@@ -163,7 +177,9 @@
                         iTime : 200,
                         sType : 'linear'
                     });
+                    pic_list_li[j].removeEventListener('touchend', fnSelected, false);
                 }
+                aRemove.length = 0;
                 btn_delete.style.display = "none";
             }
             bOff = !bOff;
@@ -189,6 +205,40 @@
             }
             for(var i = 0, len = pic_list_li.length; i < len; i ++) {
                 pic_list_li[i].dataset.index = i;
+                pic_list_li[i].style.top = '100%';
+                pic_list_li[i].style.left = '100%';
+            }
+            bOff = false;
+            fnEnd();
+            toPosition();
+        }
+        toPosition();
+        function toPosition() {
+            for(var i = 0; i < pic_list_li.length; i ++) {
+                console.log(i);
+                animate({
+                    obj : pic_list_li[i],
+                    oTarget : {
+                        left : (i % 3) * iWidth,
+                        top : Math.floor(i / 3) * iWidth
+                    },
+                    iTime : 300,
+                    sType : 'linear'
+                });
+                // pic_list_li[i].style.left = (i % 3) * iWidth + 'px'; 
+                // pic_list_li[i].style.top = Math.floor(i / 3) * iWidth + 'px'; 
+            }
+        }
+        function computedStyle(ele, attr) {
+            if (window.getComputedStyle) {
+                var value = window.getComputedStyle(ele,null)[attr];
+                return attr == 'opacity' ? value * 100 : value; //兼容不透明度，如果是不透明度，则返回整数方便计算
+            } else {
+                if(attr == 'opacity'){
+                    return Number(ele.currentStyle.getAttribute('filter').match(/(?:opacity[=:])(\d+)/)[1]);
+                }else{
+                    return ele.currentStyle[attr];
+                }
             }
         }
     </script>
